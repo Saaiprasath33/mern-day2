@@ -17,7 +17,14 @@ app.use((req, res, next) => {
 mongoose
     .connect(process.env.MONGO_URI)
     .then(() => console.log("MongoDB Connected"))
-    .catch((err) => console.log(err));
+    .catch((err) => {
+        console.log("-----------------------------------------");
+        console.log("MongoDB Connection Failed:", err.message);
+        console.log("SWITCHING TO IN-MEMORY MOCK DATABASE");
+        console.log("User data will NOT be saved after restart.");
+        console.log("-----------------------------------------");
+        global.mockDB = true;
+    });
 
 app.use("/api/auth", require("./routes/authRoutes"));
 
